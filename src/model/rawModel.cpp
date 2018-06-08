@@ -112,4 +112,3 @@ Draw_Method RawModel::get_draw_method() {
 void RawModel::set_draw_method(Draw_Method method) {
 	draw_method = method;
 }
-
