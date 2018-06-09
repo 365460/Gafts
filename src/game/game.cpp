@@ -4,9 +4,10 @@
 
 Game::Game() {}
 
-void Game::init(GLFWwindow *win){ window = win; 
-	game_statue = PLAYING;
+void Game::init(GLFWwindow *win){ window = win;
+	game_statue = MENU;
 	play = new Play(win);
+	menu = new Menu(win);
 }
 
 void Game::game_loop() {
@@ -20,8 +21,13 @@ void Game::game_loop() {
         process_keyboard();
 
 		switch(game_statue) {
+			case MENU:
+				menu->draw();
+				if (menu->next()) game_statue = PLAYING;
+				break;
 			case PLAYING:
 				play->draw();
+				break;
 			default:
 				break;
 		}
@@ -37,6 +43,17 @@ void Game::process_keyboard() {
 	switch(game_statue) {
 		case PLAYING:
 			play->process_keyboard();
+			break;
+		default:
+			break;
+	}
+}
+
+void Game::process_keyboard_change(int key, int scancode, int action, int mods) {
+	switch(game_statue) {
+		case MENU:
+			menu->process_keyboard_change(key, scancode, action, mods);
+			break;
 		default:
 			break;
 	}
@@ -47,6 +64,7 @@ void Game::process_mouse(double xpos, double ypos) {
 	switch(game_statue) {
 		case PLAYING:
 			play->process_mouse(xpos, ypos);
+			break;
 		default:
 			break;
 	}

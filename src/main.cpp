@@ -23,6 +23,10 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
 }
 
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+	game->process_keyboard_change(key, scancode, action, mods);
+}
+
 void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
 	game->process_mouse(xpos, ypos);
 }
@@ -52,6 +56,7 @@ GLFWwindow* opengl_init() {
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSetCursorPosCallback(window, mouse_callback);
+	glfwSetKeyCallback(window, key_callback);
 
     // glad: load all OpenGL function pointers
     // ---------------------------------------

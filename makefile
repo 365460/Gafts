@@ -37,6 +37,7 @@ modelSRC += src/model/rawModel.cpp
 
 gameSRC = src/game/game.cpp
 gameSRC += src/game/play.cpp
+gameSRC += src/game/menu.cpp
 
 cameraSRC = src/camera/camera.cpp
 
@@ -44,7 +45,7 @@ utilSRC = src/util/loader.cpp
 
 OUTBIN = ./bin/main
 
-GameOBJS = game.o play.o
+GameOBJS = game.o play.o menu.o
 RenderOBJS = render.o shader.o
 ModelOBJS = model.o rawModel.o
 
@@ -68,6 +69,8 @@ util.o: $(utilSRC)
 camera.o: $(cameraSRC)
 	$(GCC) $^ -c -o $@ $(GCCFLAG)
 
+rm_clean:
+	rm *.o
 
 clean:
 	del -f *.o
