@@ -146,7 +146,7 @@ Model* Loader::load_model(const char* filename) {
 	return new Model(raw_models);
 }
 
-Model* Loader::load_box(float l,float w,float h, bool sky_box) {
+Model* Loader::load_box(float l, float w, float h, Texture* texture) {
 
 	vector<float> vertices {
 		-l, -h, -w,
@@ -278,9 +278,7 @@ Model* Loader::load_box(float l,float w,float h, bool sky_box) {
 
 	vector<unsigned int> faces;
 	RawModel* raw_model = new RawModel(vertices, normal, vec_texture, faces);
-	if( sky_box ) raw_model->add_texture( Loader::load_texture("./res/image/sky.jpg") );
-	else raw_model->add_texture( Loader::load_texture("./res/image/container.jpg") );
-
+	raw_model->add_texture( texture );
 	raw_model->set_draw_method(DRAW_ARRAY);
 
 	return new Model(raw_model);

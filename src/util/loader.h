@@ -9,7 +9,7 @@ public:
     static Texture* load_texture(const char* filename, string type="texture_diffuse");
 	static Model* load_model(const char* filename);
 
-	static Model* load_box(float, float, float, bool sky_box=false);
+	static Model* load_box(float, float, float, Texture* texture);
 
 };
 

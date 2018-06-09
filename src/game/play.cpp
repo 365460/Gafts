@@ -274,7 +274,7 @@ void Sun::move(glm::vec3 val) {
 }
 
 SkyBox::SkyBox() {
-	model = Loader::load_box(SKY_LEN, SKY_LEN, SKY_LEN, 1);
+	model = Loader::load_box(SKY_LEN, SKY_LEN, SKY_LEN, Loader::load_texture("./res/image/sky2.jpg"));
 }
 
 Box::Box(Model* box_template, glm::vec3 position, int id):id(id) {
@@ -311,4 +311,3 @@ void Box::move_to(glm::vec3 position) {
 
 	center = model->get_center();
 }
-
