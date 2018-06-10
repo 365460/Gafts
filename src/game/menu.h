@@ -2,12 +2,6 @@
 #define MENU_H
 
 #include "header.h"
-#include "camera.h"
-#include "render.h"
-#include "shader.h"
-#include "loader.h"
-#include "model.h"
-#include "menu.h"
 #include "image.h"
 #include "func.hpp"
 

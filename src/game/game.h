@@ -10,11 +10,13 @@
 #include "model.h"
 #include "play.h"
 #include "menu.h"
+#include "ending.h"
 #include "func.hpp"
 
 enum GameStatue{
 	MENU,
-	PLAYING
+	PLAYING,
+	ENDING
 };
 
 class Game {
@@ -35,6 +37,7 @@ private:
 
 	Play *play;
 	Menu *menu;
+	Ending *ending;
 	GLFWwindow* window;
 	GameStatue game_statue;
 };

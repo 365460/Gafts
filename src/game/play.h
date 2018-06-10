@@ -8,6 +8,7 @@
 #include "loader.h"
 #include "model.h"
 #include "func.hpp"
+#include "ending.h" // For DEATH_TYPE
 
 class Sun;
 class SkyBox;
@@ -25,6 +26,7 @@ public:
 	void process_mouse(double xpos, double ypos);
 	void init();
 	bool is_lose();
+	DEATH_TYPE get_death_type();
 
 private:
 	void load_object();
@@ -35,6 +37,7 @@ private:
 	bool check_attach();
 	void set_warning();
 
+	DEATH_TYPE death_type;
 
 	vector<Box*> platform;
 	Sun* sun;

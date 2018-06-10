@@ -1,8 +1,8 @@
 #include "image.h"
 
-void Image::load(const char *text, const char *vert, const char *frag) {
-    this->shader = new Shader(vert, frag, "image-shader");
-    this->texture = Loader::load_texture(text);
+void Image::load(const char *texture) {
+    this->shader = new Shader("./shader/image.vert", "./shader/image.frag", "image-shader");
+    this->texture = Loader::load_texture(texture);
 
     /* Initialize shader */
     float vertices[] = {
