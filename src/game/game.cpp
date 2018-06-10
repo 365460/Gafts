@@ -23,10 +23,17 @@ void Game::game_loop() {
 		switch(game_statue) {
 			case MENU:
 				menu->draw();
-				if (menu->next()) game_statue = PLAYING;
+				if (menu->next()) {
+					game_statue = PLAYING;
+					play->init();
+				}
 				break;
 			case PLAYING:
 				play->draw();
+				if(play->is_lose()) {
+					game_statue = MENU;
+					menu->reset();
+				}
 				break;
 			default:
 				break;

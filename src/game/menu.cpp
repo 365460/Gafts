@@ -8,8 +8,8 @@ Menu::Menu(GLFWwindow *window) {
     this->reset();
 
     /* Initialize image */
-    this->title[0]->load("res/image/title1.jpg", "shader/menu.vert", "shader/menu.frag");
-    this->title[1]->load("res/image/title2.jpg", "shader/menu.vert", "shader/menu.frag");
+    this->title[0]->load("./res/image/title1.jpg", "./shader/menu.vert", "./shader/menu.frag");
+    this->title[1]->load("./res/image/title2.jpg", "./shader/menu.vert", "./shader/menu.frag");
 }
 
 void Menu::reset() {
