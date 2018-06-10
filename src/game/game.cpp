@@ -8,6 +8,7 @@ void Game::init(GLFWwindow *win){ window = win;
 	game_statue = MENU;
 	play = new Play(win);
 	menu = new Menu(win);
+	ending = new Ending(win);
 }
 
 void Game::game_loop() {
@@ -31,6 +32,13 @@ void Game::game_loop() {
 			case PLAYING:
 				play->draw();
 				if(play->is_lose()) {
+					game_statue = ENDING;
+					ending->game_over(play->get_death_type());
+				}
+				break;
+			case ENDING:
+				ending->draw();
+				if (ending->next()) {
 					game_statue = MENU;
 					menu->reset();
 				}
@@ -61,13 +69,15 @@ void Game::process_keyboard_change(int key, int scancode, int action, int mods) 
 		case MENU:
 			menu->process_keyboard_change(key, scancode, action, mods);
 			break;
+		case ENDING:
+			ending->process_keyboard_change(key, scancode, action, mods);
+			break;
 		default:
 			break;
 	}
 }
 
 void Game::process_mouse(double xpos, double ypos) {
-
 	switch(game_statue) {
 		case PLAYING:
 			play->process_mouse(xpos, ypos);

@@ -52,6 +52,7 @@ bool Play::is_lose() {
 		cout << "touch sun!\n";
 		cout << "Score: " << -camera->position.y << endl;
 		cout << "==================================\n";
+		death_type = BURNT_INTO_ASHES;
 		return true;
 	}
 	else if(is_flying and glfwGetTime() - start_flying >= MAX_TIME_IN_SPACE) {
@@ -59,14 +60,19 @@ bool Play::is_lose() {
 		cout << "too long\n";
 		cout << "Score: " << -camera->position.y << endl;
 		cout << "==================================\n";
+		death_type = LOST_IN_THE_UNIVERSE;
 		return true;
 	}
 	return false;
 }
 
+DEATH_TYPE Play::get_death_type() {
+	return death_type;
+}
+
 void Play::update_v() {
 
-	v_sun = (SUN_PLUNG_PRE_SECOND + buff /15 ) / fps;
+	v_sun = (SUN_PLUNG_PRE_SECOND + buff / 15 ) / fps;
 	v_play = (PLAYER_PLUNG_PRE_SECOND + buff ) / fps;
 
 	// cout << "fps = " << fps << ", v_sun = " << v_sun << ", v_play = " << v_play << endl;

@@ -2,12 +2,7 @@
 #define MENU_H
 
 #include "header.h"
-#include "camera.h"
-#include "render.h"
-#include "shader.h"
-#include "loader.h"
-#include "model.h"
-#include "menu.h"
+#include "image.h"
 #include "func.hpp"
 
 class Menu {
@@ -22,8 +17,7 @@ private:
     const int change_rate = 20, stay_time = 15;
     int counter;
     bool start_playing, current_render;
-    Texture *texture[2];
-    Shader *menu_shader;
+    Image *title[2];
     GLFWwindow *window;
 };
 
