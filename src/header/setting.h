@@ -23,4 +23,7 @@ const float TREMOR_INIT= 0.002;
 const float TREMOR_MAX_HE = 0.03;
 const float TREMOR_TIME = 0.3;
 
+// rule 
+const float MAX_TIME_IN_SPACE = 8;
+
 #endif

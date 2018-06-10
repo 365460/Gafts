@@ -17,29 +17,24 @@ class Play {
 
 public:
 	Play(GLFWwindow *win);
-	~Play(){
-//		delete camera;
-		//delete render;
-		//delete main_shader;
-		//delete sky_shader;
-		//delete light_shader;
-		//for(auto& x: platform) delete x;
-		//delete sun;
-		//delete sky_box;
-	}
+	~Play() {}
 
 
 	void draw();
 	void process_keyboard();
 	void process_mouse(double xpos, double ypos);
-	bool check_attach();
-	void update_v();
-	void update_scene();
-	bool check_inside(glm::vec3 pos);
+	void init();
+	bool is_lose();
 
 private:
 	void load_object();
 	void update_object();
+	void update_v();
+	void update_scene();
+	bool check_inside(glm::vec3 pos);
+	bool check_attach();
+	void set_warning();
+
 
 	vector<Box*> platform;
 	Sun* sun;
@@ -58,6 +53,10 @@ private:
 	int landing_id;
 	float last_landing;
 	bool is_tremor;
+	bool is_flying;
+	float start_flying;
+
+	float buff;
 
 	float lowest_y;
 	GLFWwindow *window;
@@ -72,6 +71,8 @@ public:
 	float radius;
 	// float scale;
 	void move(glm::vec3 val);
+
+	bool touch(glm::vec3 pos);
 };
 
 class SkyBox {

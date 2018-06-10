@@ -52,9 +52,12 @@ glm::vec3 Model::get_position() {
 }
 
 glm::vec3 Model::get_center() {
+	float min_val[3] = { 100000000, 100000000, 100000000 };
+	float max_val[3] = { -100000000, -100000000, -100000000};
 	// float MAX = std::numeric_limits<float>::max();
-	float min_val[3] = { 10000, 10000, 10000 };
-	float max_val[3] = { -10000, -10000, -10000};
+    // float MIN = std::numeric_limits<float>::min();
+	// float min_val[3] = { MAX, MAX, MAX};
+	// float max_val[3] = { MIN, MIN, MIN};
 	for(auto&raw : this->raw_models) {
 		for(int i=0; i<raw->vertices.size(); i+=3) {
 			glm::vec4 pos(raw->vertices[i], raw->vertices[i+1], raw->vertices[i+2], 1.0);
@@ -69,6 +72,9 @@ glm::vec3 Model::get_center() {
 		}
 	}
 
+    // cout << MAX << " " << MIN << endl;
+    // cout << min_val[0] << " " << min_val[1] << " " << min_val[2] << endl;
+    // cout << max_val[0] << " " << max_val[1] << " " << max_val[2] << endl << endl;
 	glm::vec3 center;
 	center.x = (min_val[0] + max_val[0])/2;
 	center.y = (min_val[1] + max_val[1])/2;
@@ -82,8 +88,12 @@ glm::vec3 Model::get_center() {
 
 
 glm::vec3 Model::get_size() {
-	float min_val[3] = { 10000, 10000, 10000 };
-	float max_val[3] = { -10000, -10000, -10000};
+	float min_val[3] = { 100000000, 100000000, 100000000 };
+	float max_val[3] = { -100000000, -100000000, -100000000};
+	// float MAX = std::numeric_limits<float>::max();
+    // float MIN = std::numeric_limits<float>::min();
+	// float min_val[3] = { MAX, MAX, MAX};
+	// float max_val[3] = { MIN, MIN, MIN};
 	for(auto&raw : this->raw_models) {
 		for(int i=0; i<raw->vertices.size(); i+=3) {
 			glm::vec4 pos(raw->vertices[i], raw->vertices[i+1], raw->vertices[i+2], 1.0);
@@ -102,5 +112,6 @@ glm::vec3 Model::get_size() {
 	size.x = max_val[0] - min_val[0];
 	size.y = max_val[1] - min_val[1];
 	size.z = max_val[2] - min_val[2];
+
 	return size;
 }

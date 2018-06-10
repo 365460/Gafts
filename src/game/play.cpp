@@ -3,7 +3,10 @@
 float box_len = 5.12, box_width = 5.12, box_height = 0.44;
 glm::vec3 warning_color[] = { glm::vec3(0, 0, 0), glm::vec3(0.3, 0, 0) };
 
-Play::Play(GLFWwindow *win):is_warning(false), attach(false), window(win) {
+Play::Play(GLFWwindow *win):window(win) {}
+
+void Play::init() {
+	platform.clear();
 
 	camera = new Camera(glm::vec3(0, 0, 3), glm::vec3(0, 0, -1), glm::vec3(0, 1, 0));
 	main_shader = new Shader("./shader/main.vert", "./shader/main.frag", "main");
@@ -19,6 +22,10 @@ Play::Play(GLFWwindow *win):is_warning(false), attach(false), window(win) {
 	landing_id = 0;
 	is_tremor = 0;
 	fps = 400;
+	is_warning = false;
+	is_flying = false;
+	attach = false;
+	buff = 0;
 	load_object();
 }
 
@@ -39,25 +46,62 @@ void Play::draw() {
 	update_object();
 }
 
+bool Play::is_lose() {
+	if(sun->touch(camera->position)) {
+		cout << "==================================\n";
+		cout << "touch sun!\n";
+		cout << "Score: " << -camera->position.y << endl;
+		cout << "==================================\n";
+		return true;
+	}
+	else if(is_flying and glfwGetTime() - start_flying >= MAX_TIME_IN_SPACE) {
+		cout << "==================================\n";
+		cout << "too long\n";
+		cout << "Score: " << -camera->position.y << endl;
+		cout << "==================================\n";
+		return true;
+	}
+	return false;
+}
+
 void Play::update_v() {
 
-	v_sun = SUN_PLUNG_PRE_SECOND / fps;
-	v_play = PLAYER_PLUNG_PRE_SECOND / fps;
+	v_sun = (SUN_PLUNG_PRE_SECOND + buff /15 ) / fps;
+	v_play = (PLAYER_PLUNG_PRE_SECOND + buff ) / fps;
 
 	// cout << "fps = " << fps << ", v_sun = " << v_sun << ", v_play = " << v_play << endl;
+}
+
+void Play::set_warning() {
+
+	float diff = glfwGetTime() - start_flying;
+	int id = is_warning;
+	if(is_warning and (MAX_TIME_IN_SPACE-diff) < 3) { // emergency
+		static int cnt = 0;
+		if(cnt >= 5) id = cnt = 0;
+		else id =  1;
+		cnt++;
+	}
+	else id = is_warning;
+
+	main_shader->use_program();
+	main_shader->setVec3("warning_color", warning_color[id]);
+
+	sky_shader->use_program();
+	sky_shader->setVec3("warning_color", warning_color[id]);
 }
 
 void Play::update_scene() {
 
 	/*	update position of sun */
 	glm::vec4 light_pos = sun->model->get_translation() * glm::vec4(sun->center, 1.0f);
+	// cout << "light_pos = " << light_pos.x << ", " << light_pos.y << ", " << light_pos.z << endl;
+	light_pos = glm::vec4(0, 400, 0, 0);
 	main_shader->use_program();
 	main_shader->setVec3("lightPos", light_pos);
 
 	/*	update emergency mode*/
-	main_shader->setVec3("warning_color", warning_color[is_warning]);
-	sky_shader->use_program();
-	sky_shader->setVec3("warning_color", warning_color[is_warning]);
+	set_warning();
 
 	/* magic part T_T */
 	glm::mat4 trans(1.0);
@@ -74,8 +118,13 @@ void Play::update_object() {
 		camera->position -= glm::vec3(0, v_play, 0);
 		is_warning = 1;
 		is_tremor = 0;
+		if(!is_flying) {
+			is_flying = true;
+			start_flying = glfwGetTime();
+		}
 	}
 	else { // interesting tremor simulating landing
+		is_flying = 0;
 		is_warning = 0;
 		static bool first_tremor = 1;
 		static glm::vec3 original_pos;
@@ -102,16 +151,16 @@ void Play::update_object() {
 
 	sun->move(glm::vec3(0, -v_sun, 0 ));
 
-	// TODO: check platform whether exists
 	for(auto& box: platform) {
-		if(landing_id != box->id and box->center.y >= sun->center.y - sun->radius ) {
+		// if(landing_id != box->id and box->center.y >= sun->center.y - sun->radius ) {
+		if(landing_id != box->id and box->center.y >= camera->position.y + 5 ) {
 			float angle = glm::radians( (float)(rand()%361) );
 			float radius = rand()%40;
 			glm::vec3 new_pos = glm::vec3(sin(angle)*radius, 0, cos(angle)*radius);
-			new_pos.y = -rand()%60 - lowest_y;
+			new_pos.y = lowest_y -rand()%40;
 
 			box->move_to( new_pos );
-			lowest_y = box->center.y;
+			lowest_y = std::min(box->center.y, lowest_y);
 		}
 	}
 }
@@ -206,8 +255,10 @@ void Play::process_keyboard() {
 	float deltaTime = currenFrame - lastFrame;
 	lastFrame = currenFrame;
 
+	buff -= 0.1;
+	buff = std::max(buff , 0.0f);
 	glm::vec3 vec(0);
-    float speed = CAMERA_INIT * deltaTime;
+    float speed = (CAMERA_INIT + buff ) * deltaTime;
     /* move camer froward/backward/left/right*/
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) glfwSetWindowShouldClose(window, true);
     if(glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
@@ -218,7 +269,9 @@ void Play::process_keyboard() {
         vec = glm::normalize(glm::cross(camera->front, camera->up_direction)) * -speed;
     if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         vec = glm::normalize(glm::cross(camera->front, camera->up_direction)) * speed;
+    if(glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)  buff += 0.5;
 
+	cout << "buff = " << buff << endl;
 	if(!check_inside(vec + camera->position)) {
 		camera->position += vec;
 		camera->update_vector();
@@ -267,14 +320,19 @@ Sun::Sun() {
 
 }
 
+bool Sun::touch(glm::vec3 pos) {
+	if( pos.y >= center.y - radius) return true;
+	return false;
+}
+
 void Sun::move(glm::vec3 val) {
 	model->move( val );
 	center = model->get_center();
-	cout << "sun move " << " y = " << center.y << endl;
+	// cout << "sun move " << " y = " << center.y << endl;
 }
 
 SkyBox::SkyBox() {
-	model = Loader::load_box(SKY_LEN, SKY_LEN, SKY_LEN, Loader::load_texture("./res/image/sky2.jpg"));
+	model = Loader::load_box(SKY_LEN, SKY_LEN, SKY_LEN, Loader::load_texture("./res/image/sky.jpg"));
 }
 
 Box::Box(Model* box_template, glm::vec3 position, int id):id(id) {

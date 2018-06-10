@@ -3,8 +3,8 @@
 Menu::Menu(GLFWwindow *window) {
     this->window = window;
     this->menu_shader = new Shader("./shader/menu.vert", "./shader/menu.frag", "menu");
-    this->texture[0] = Loader::load_texture("res/image/title1.jpg");
-    this->texture[1] = Loader::load_texture("res/image/title2.jpg");
+    this->texture[0] = Loader::load_texture("./res/image/title1.jpg");
+    this->texture[1] = Loader::load_texture("./res/image/title2.jpg");
     this->reset();
 }
 
