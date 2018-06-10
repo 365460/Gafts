@@ -13,11 +13,11 @@ Ending::Ending(GLFWwindow *window) {
     image[3 << 1]->load("./res/image/ending1_4.jpg");
     image[4 << 1]->load("./res/image/ending1_5.jpg");
 
-    image[0 << 1 | 1]->load("./res/image/ending1_1.jpg");
-    image[1 << 1 | 1]->load("./res/image/ending1_2.jpg");
-    image[2 << 1 | 1]->load("./res/image/ending1_3.jpg");
-    image[3 << 1 | 1]->load("./res/image/ending1_4.jpg");
-    image[4 << 1 | 1]->load("./res/image/ending1_5.jpg");
+    image[0 << 1 | 1]->load("./res/image/ending2_1.jpg");
+    image[1 << 1 | 1]->load("./res/image/ending2_2.jpg");
+    image[2 << 1 | 1]->load("./res/image/ending2_3.jpg");
+    image[3 << 1 | 1]->load("./res/image/ending2_4.jpg");
+    image[4 << 1 | 1]->load("./res/image/ending2_5.jpg");
 }
 
 bool Ending::next() {
