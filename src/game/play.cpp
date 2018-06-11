@@ -277,7 +277,7 @@ void Play::process_keyboard() {
         vec = glm::normalize(glm::cross(camera->front, camera->up_direction)) * speed;
     if(glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)  buff += 0.5;
 
-	cout << "buff = " << buff << endl;
+	// cout << "buff = " << buff << endl;
 	if(!check_inside(vec + camera->position)) {
 		camera->position += vec;
 		camera->update_vector();

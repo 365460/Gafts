@@ -4,7 +4,7 @@
 
 Texture* Loader::load_texture(const char* filename, string type) {
 
-	cout << "loading " << filename << endl;
+	// cout << "loading " << filename << endl;
 	int width, height, nrChannels;
 	unsigned char *data = stbi_load(filename, &width, &height, &nrChannels, 0);
 	if(!data) {
@@ -20,7 +20,7 @@ Texture* Loader::load_texture(const char* filename, string type) {
 	glGenTextures(1, &texture_id);
 	glBindTexture(GL_TEXTURE_2D, texture_id);
 	glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-	cout << "width: " << width << ", height: " << height << endl;
+	// cout << "width: " << width << ", height: " << height << endl;
 	glGenerateMipmap(GL_TEXTURE_2D);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
