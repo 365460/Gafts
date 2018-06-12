@@ -23,7 +23,8 @@ bool Menu::next() {
 }
 
 void Menu::process_keyboard_change(int key, int scancode, int action, int mods) {
-    if (action == GLFW_PRESS)
+    // if (action == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
         start_playing = true;
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
